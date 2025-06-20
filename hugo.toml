@@ -31,12 +31,12 @@ theme = 'PaperMod'
 [[menu.main]]
   identifier = "about"
   name = "About"
-  url = "/about/"
+  url = "https://dreybuilds.github.io/about/"
   weight = 1
 
 [[menu.main]]
   identifier = "posts"
   name = "Posts"
-  url = "/posts/"
+  url = "https://dreybuilds.github.io/about/"
   weight = 2
 
