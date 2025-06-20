@@ -1,0 +1,42 @@
+baseURL = 'https://dreybuilds.github.io/'
+languageCode = 'en-us'
+title = 'Audrey Nzilani'
+theme = 'PaperMod'
+
+[params]
+  author = "Audrey Nzilani"
+  ShowReadingTime = true
+  ShowCodeCopyButtons = true
+  ShowPostNavLinks = true
+  giscusTheme = "purple_dark"
+  disableComments = false
+
+
+[params.homeInfoParams]
+  Title = "Hi, I'm Audrey 👋"
+  Content = "IoT | Full-Stack | Blockchain\n\nI design systems that connect hardware with the decentralized web."
+
+[[params.socialIcons]]
+  name = "github"
+  url = "https://github.com/dreybuilds"
+
+[[params.socialIcons]]
+  name = "linkedin"
+  url = "https://linkedin.com/in/audrey-nzilani"
+
+[[params.socialIcons]]
+  name = "twitter"
+  url = "https://twitter.com/audreynzilani"
+
+[[menu.main]]
+  identifier = "about"
+  name = "About"
+  url = "/about/"
+  weight = 1
+
+[[menu.main]]
+  identifier = "posts"
+  name = "Posts"
+  url = "/posts/"
+  weight = 2
+
