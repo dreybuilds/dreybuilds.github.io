@@ -1,20 +1,28 @@
-baseURL = 'https://dreybuilds.github.io/'
-languageCode = 'en-us'
-title = 'Audrey Nzilani'
-theme = 'PaperMod'
+baseURL = "https://dreybuilds.github.io/"
+languageCode = "en-us"
+title = "Audrey Nzilani"
+theme = "PaperMod"
 
 [params]
   author = "Audrey Nzilani"
   ShowReadingTime = true
   ShowCodeCopyButtons = true
   ShowPostNavLinks = true
-  giscusTheme = "purple_dark"
-  disableComments = false
+  ShowBreadCrumbs = true
+  ShowShareButtons = true
+  comments = true
+  defaultTheme = "dark"
+  disableThemeToggle = false
+  giscusTheme = "dark_tritanopia"  # or "dark_dimmed", matches rest of site
+  fontFamily = "Inter, Roboto, Segoe UI, sans-serif" # Clean dev-friendly font
 
+  [params.homeInfoParams]
+    Title = "Hi, I'm Audrey 👋"
+    Content = "IoT | Full-Stack | Blockchain\n\nI design systems that connect hardware with the decentralized web."
 
-[params.homeInfoParams]
-  Title = "Hi, I'm Audrey 👋"
-  Content = "IoT | Full-Stack | Blockchain\n\nI design systems that connect hardware with the decentralized web."
+  [params.assets]
+    favicon = "favicon.ico"
+    css = ["css/custom.css"]
 
 [[params.socialIcons]]
   name = "github"
@@ -31,12 +39,18 @@ theme = 'PaperMod'
 [[menu.main]]
   identifier = "about"
   name = "About"
-  url = "https://dreybuilds.github.io/about/"
+  url = "/about/"
   weight = 1
 
 [[menu.main]]
   identifier = "posts"
-  name = "Posts"
-  url = "https://dreybuilds.github.io/about/"
+  name = "Blog"
+  url = "/posts/"
   weight = 2
+
+[[menu.main]]
+  identifier = "projects"
+  name = "Projects"
+  url = "/projects/"
+  weight = 3
 
