@@ -141,20 +141,25 @@
       const renderArticles = (filterTag = "all") => {
         grid.innerHTML = articles
           .filter(a => filterTag === "all" || a.tags.includes(filterTag))
-          .map(a => `
-            <article class="card" onclick="window.open('${a.link}', '_blank')">
-              <h3>${a.title}</h3>
-              <p>${a.desc}</p>
-              <div class="chip-row">
-                <a class="chip" href="${a.link}" target="_blank" rel="noopener">Read</a>
-                ${a.tags.map(t => `<span class="chip subtag">#${t}</span>`).join("")}
-              </div>
-            </article>
-          `)
+          .map(a => {
+            const isExternal = a.file.startsWith("http");
+            const articleLink = isExternal
+              ? a.file
+              : `article.html?file=articles/${encodeURIComponent(a.file)}`;
+            return `
+              <article class="card" onclick="window.open('${articleLink}', '_blank')">
+                <h3>${a.title}</h3>
+                <p>${a.desc}</p>
+                <div class="chip-row">
+                  <a class="chip" href="${articleLink}" target="_blank" rel="noopener">Read</a>
+                  ${a.tags.map(t => `<span class="chip subtag">#${t}</span>`).join("")}
+                </div>
+              </article>
+            `;
+          })
           .join("");
       };
 
-      renderArticles("all");
 
       tagFilter.addEventListener("click", e => {
         if (!e.target.classList.contains("tag-chip")) return;
