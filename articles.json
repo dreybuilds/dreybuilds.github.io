@@ -2,13 +2,13 @@
   {
     "title": "Ongrid Protocol",
     "desc": "Solar Power Monitoring & Edge Transactions.",
-    "file": "articles/ongrid.md",
-    "tags": [
-      "blockchain",
-      "solar",
-      "edge",
-      "rust"
-    ]
+    "file": "ongrid.md",
+    "tags": ["blockchain", "solar", "edge", "rust"]
+  },
+  {
+    "title": "Rust for Edge Devices",
+    "desc": "Why Rust’s safety and performance shine on low-level hardware.",
+    "file": "https://hackmd.io/laWrTac9QXyHjmEUfMsVLQ",
+    "tags": ["rust", "embedded"]
   }
-
 ]
