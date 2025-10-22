@@ -2,7 +2,18 @@ name: Build and Deploy to GitHub Pages
 
 on:
   push:
-    branches: ["main"]  # or "master" if your repo uses that
+    branches: ["main"]     # your main branch
+    paths:
+      - 'articles/**/*.md' # only rebuild articles.json when markdown changes
+      - 'scripts/generate_articles_json.py'
+      - '.github/workflows/build.yml'
+      - 'index.html'
+      - 'styles.css'
+      - 'script.js'
+      - 'article.html'
+      - 'assets/**'
+      - 'articles.json'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -15,21 +26,33 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # get full history (good for timestamps or diffs)
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
 
-      - name: Generate articles.json
-        run: python3 scripts/generate_articles_json.py
+      # ✅ Only run if .md files changed
+      - name: Generate articles.json (if Markdown changed)
+        if: contains(github.event.head_commit.message, '[skip json]') == false
+        run: |
+          echo "🧩 Checking for Markdown changes..."
+          CHANGED=$(git diff --name-only HEAD~1 HEAD | grep -E '^articles/.*\.md$' || true)
+          if [ -n "$CHANGED" ]; then
+            echo "Markdown changed — regenerating articles.json..."
+            python3 scripts/generate_articles_json.py
+          else
+            echo "✅ No Markdown changes — skipping regeneration."
+          fi
 
       - name: Commit and push updated articles.json
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add articles.json
-          git diff --cached --quiet || git commit -m "Auto-update articles.json"
+          git diff --cached --quiet || git commit -m "🤖 Auto-update articles.json"
           git push
 
       - name: Upload artifact for GitHub Pages
