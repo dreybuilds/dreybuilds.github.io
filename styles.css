@@ -133,3 +133,20 @@ html{ scroll-behavior:smooth; }
   .hero{ grid-template-columns: 1fr; }
   .hero-art{ order: -1; }
 }
+
+#content {
+  max-width: 720px;
+  margin-inline: auto;
+}
+#content h1, #content h2, #content h3 {
+  margin-top: 1.6rem;
+  color: var(--accent);
+}
+#content p, #content li {
+  color: var(--text);
+  line-height: 1.7;
+}
+#content a {
+  color: var(--accent-2);
+  text-decoration: underline;
+}

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Article Viewer | dreybuilds</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <header class="site-header container">
+    <a class="brand" href="index.html">◎ Audrey</a>
+  </header>
+
+  <main class="container section" id="content">
+    <h2>Loading article...</h2>
+  </main>
+
+  <footer class="site-footer container">
+    <small>© <span id="year"></span> Audrey Nzilani</small>
+  </footer>
+
+  <script>
+    // Get ?file= parameter (e.g. article.html?file=ongrid-protocol.md)
+    const params = new URLSearchParams(window.location.search);
+    const file = params.get("file");
+    const content = document.getElementById("content");
+
+    if (file) {
+      fetch("articles/" + file)
+        .then(res => res.text())
+        .then(md => {
+          content.innerHTML = marked.parse(md);
+        })
+        .catch(() => content.innerHTML = "<p>Article not found.</p>");
+    } else {
+      content.innerHTML = "<p>No article specified.</p>";
+    }
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
