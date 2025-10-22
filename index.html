@@ -33,7 +33,7 @@
     <!-- Hero -->
     <section class="hero container">
       <div class="hero-copy">
-        <h13>Full-Stack • Embedded • Blockchain</h3>
+        <h2>Full-Stack • Embedded • Blockchain</h2>
         <p class="lede">Tinker. Build. Run.</p>
         <div class="cta-row">
           <a class="btn btn-primary" href="https://github.com/dreybuilds" target="_blank" rel="noopener">GitHub</a>
@@ -74,11 +74,7 @@
     <!-- Articles -->
     <section id="articles" class="container section">
       <h2>Articles</h2>
-
-      <!-- Tag Filter Bar -->
       <div id="tag-filter" class="tag-row"></div>
-
-      <!-- Articles Grid -->
       <div id="articles-grid" class="grid"></div>
     </section>
 
@@ -99,72 +95,80 @@
     <small>© <span id="year"></span> Audrey Nzilani — Built for GitHub Pages.</small>
   </footer>
 
-  <!-- Script -->
+  <!-- Scripts -->
   <script>
-  // Update footer year
+  // Theme toggle
+  (function () {
+    const btn = document.getElementById('themeToggle');
+    if (!btn) return;
+    const KEY = 'theme';
+    const apply = (mode) => {
+      document.documentElement.classList.toggle('light', mode === 'light');
+      btn.textContent = mode === 'light' ? '☀' : '☾';
+      localStorage.setItem(KEY, mode);
+    };
+    const saved = localStorage.getItem(KEY);
+    const initial = saved
+      || (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    apply(initial);
+    btn.addEventListener('click', () => {
+      const next = document.documentElement.classList.contains('light') ? 'dark' : 'light';
+      apply(next);
+    });
+  })();
+
+  // Footer year
   const year = document.getElementById("year");
   if (year) year.textContent = new Date().getFullYear();
 
-  let activeTag = null;
+  // Articles + Tag filter
+  fetch("articles.json")
+    .then(res => res.json())
+    .then(articles => {
+      const tagFilter = document.getElementById("tag-filter");
+      const grid = document.getElementById("articles-grid");
 
-fetch("articles.json")
-  .then(res => res.json())
-  .then(articles => {
-    const tagFilter = document.getElementById("tag-filter");
-    const grid = document.getElementById("articles-grid");
+      const allTags = new Set();
+      articles.forEach(a => a.tags.forEach(t => allTags.add(t)));
+      const tagList = ["all", ...Array.from(allTags)];
 
-    // Collect all unique tags
-    const allTags = new Set();
-    articles.forEach(a => a.tags.forEach(t => allTags.add(t)));
-
-    // Add the default "All" tag at the beginning
-    const tagList = ["all", ...Array.from(allTags)];
-
-    // Render tag chips
-    tagFilter.innerHTML = tagList
-      .map(tag => `<span class="chip tag-chip" data-tag="${tag}">#${tag}</span>`)
-      .join("");
-
-    // Render articles
-    const renderArticles = (filterTag = "all") => {
-      grid.innerHTML = articles
-        .filter(a => filterTag === "all" || a.tags.includes(filterTag))
-        .map(a => `
-          <article class="card" onclick="window.open('${a.link}', '_blank')">
-            <h3>${a.title}</h3>
-            <p>${a.desc}</p>
-            <div class="chip-row">
-              <a class="chip" href="${a.link}" target="_blank" rel="noopener">Read</a>
-              ${a.tags.map(t => `<span class="chip subtag">#${t}</span>`).join("")}
-            </div>
-          </article>
-        `)
+      // Render tag chips
+      tagFilter.innerHTML = tagList
+        .map(tag => `<span class="chip tag-chip" data-tag="${tag}">#${tag}</span>`)
         .join("");
-    };
 
-    // Initial render: show all
-    renderArticles("all");
+      // Render articles
+      const renderArticles = (filterTag = "all") => {
+        grid.innerHTML = articles
+          .filter(a => filterTag === "all" || a.tags.includes(filterTag))
+          .map(a => `
+            <article class="card" onclick="window.open('${a.link}', '_blank')">
+              <h3>${a.title}</h3>
+              <p>${a.desc}</p>
+              <div class="chip-row">
+                <a class="chip" href="${a.link}" target="_blank" rel="noopener">Read</a>
+                ${a.tags.map(t => `<span class="chip subtag">#${t}</span>`).join("")}
+              </div>
+            </article>
+          `)
+          .join("");
+      };
 
-    // Tag filtering logic
-    tagFilter.addEventListener("click", e => {
-      if (!e.target.classList.contains("tag-chip")) return;
+      renderArticles("all");
 
-      const clickedTag = e.target.dataset.tag;
-      document.querySelectorAll(".tag-chip").forEach(c =>
-        c.classList.toggle("active", c.dataset.tag === clickedTag)
-      );
-
-      // Render based on clicked tag (reset to all if "all")
-      renderArticles(clickedTag);
-    });
-  })
-  .catch(err => console.error("Error loading articles:", err));
-
-</script>
-
+      tagFilter.addEventListener("click", e => {
+        if (!e.target.classList.contains("tag-chip")) return;
+        const clickedTag = e.target.dataset.tag;
+        document.querySelectorAll(".tag-chip").forEach(c =>
+          c.classList.toggle("active", c.dataset.tag === clickedTag)
+        );
+        renderArticles(clickedTag);
+      });
+    })
+    .catch(err => console.error("Error loading articles:", err));
+  </script>
 
   <style>
-    /* Tag + Chip Styling */
     .tag-row {
       display: flex;
       flex-wrap: wrap;
