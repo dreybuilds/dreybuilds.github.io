@@ -1,0 +1,13 @@
+[
+  {
+    "title": "Ongrid Protocol",
+    "desc": "Solar Power Monitoring & Edge Transactions.",
+    "file": "ongrid.md",
+    "tags": [
+      "blockchain",
+      "solar",
+      "edge",
+      "rust"
+    ]
+  }
+]
