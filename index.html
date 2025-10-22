@@ -101,63 +101,62 @@
 
   <!-- Script -->
   <script>
-    // Year
-    const year = document.getElementById("year");
-    if (year) year.textContent = new Date().getFullYear();
+  // Update footer year
+  const year = document.getElementById("year");
+  if (year) year.textContent = new Date().getFullYear();
 
-    // Article Tag Filter + Loader
-    let activeTag = null;
+  let activeTag = null;
 
-    fetch("articles.json")
-      .then(res => res.json())
-      .then(articles => {
-        const allTags = new Set();
-        articles.forEach(a => a.tags.forEach(t => allTags.add(t)));
+  fetch("articles.json")
+    .then(res => res.json())
+    .then(articles => {
+      const tagFilter = document.getElementById("tag-filter");
+      const grid = document.getElementById("articles-grid");
 
-        const tagFilter = document.getElementById("tag-filter");
-        const grid = document.getElementById("articles-grid");
+      // Collect unique tags
+      const allTags = new Set();
+      articles.forEach(a => a.tags.forEach(t => allTags.add(t)));
 
-        // Render tag chips
-        tagFilter.innerHTML = Array.from(allTags)
-          .map(tag => `<span class="chip tag-chip" data-tag="${tag}">#${tag}</span>`)
+      // Render tag chips
+      tagFilter.innerHTML = Array.from(allTags)
+        .map(tag => `<span class="chip tag-chip" data-tag="${tag}">#${tag}</span>`)
+        .join("");
+
+      // Render article cards
+      const renderArticles = (tag = null) => {
+        grid.innerHTML = articles
+          .filter(a => !tag || a.tags.includes(tag))
+          .map(a => `
+            <article class="card" onclick="window.open('${a.link}', '_blank')">
+              <h3>${a.title}</h3>
+              <p>${a.desc}</p>
+              <div class="chip-row">
+                <a class="chip" href="${a.link}" target="_blank" rel="noopener">Read</a>
+                ${a.tags.map(t => `<span class="chip subtag">#${t}</span>`).join("")}
+              </div>
+            </article>
+          `)
           .join("");
+      };
 
-        // Render articles
-        const renderArticles = (tag = null) => {
-          // Keep any static featured article
-          const staticContent = grid.querySelector("article.card")?.outerHTML || "";
-          grid.innerHTML = staticContent +
-            articles
-              .filter(a => !tag || a.tags.includes(tag))
-              .map(a => `
-                <article class="card">
-                  <h3>${a.title}</h3>
-                  <p>${a.desc}</p>
-                  <div class="chip-row">
-                    <a class="chip" href="article.html?file=${a.file}">Read</a>
-                    ${a.tags.map(t => `<span class="chip subtag">#${t}</span>`).join("")}
-                  </div>
-                </article>
-              `)
-              .join("");
-        };
+      // Initial render
+      renderArticles();
 
-        renderArticles();
+      // Tag filtering
+      tagFilter.addEventListener("click", e => {
+        if (e.target.dataset.tag) {
+          const clickedTag = e.target.dataset.tag;
+          activeTag = activeTag === clickedTag ? null : clickedTag;
+          document.querySelectorAll(".tag-chip").forEach(c =>
+            c.classList.toggle("active", c.dataset.tag === activeTag)
+          );
+          renderArticles(activeTag);
+        }
+      });
+    })
+    .catch(err => console.error("Error loading articles:", err));
+</script>
 
-        // Handle tag filter clicks
-        tagFilter.addEventListener("click", e => {
-          if (e.target.dataset.tag) {
-            const clickedTag = e.target.dataset.tag;
-            activeTag = activeTag === clickedTag ? null : clickedTag;
-            document.querySelectorAll(".tag-chip").forEach(c =>
-              c.classList.toggle("active", c.dataset.tag === activeTag)
-            );
-            renderArticles(activeTag);
-          }
-        });
-      })
-      .catch(err => console.error("Error loading articles:", err));
-  </script>
 
   <style>
     /* Tag + Chip Styling */
