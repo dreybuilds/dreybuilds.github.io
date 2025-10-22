@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="color-scheme" content="dark light">
+  <meta name="color-scheme" content="dark light" />
   <title>Audrey Nzilani | dreybuilds</title>
   <meta name="description" content="My digital space — quests in embedded systems, blockchain, and full-stack development." />
-  <link rel="preload" href="assets/flower-robot.svg" as="image" type="image/svg+xml">
+  <link rel="preload" href="assets/flower-robot.svg" as="image" type="image/svg+xml" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 
@@ -29,17 +29,17 @@
 
   <!-- Main -->
   <main id="top">
+
     <!-- Hero -->
     <section class="hero container">
       <div class="hero-copy">
-        <h2>Full-Stack • Embedded • Blockchain</h1>
+        <h1>Full-Stack • Embedded • Blockchain</h1>
         <p class="lede">Tinker. Build. Run.</p>
         <div class="cta-row">
           <a class="btn btn-primary" href="https://github.com/dreybuilds" target="_blank" rel="noopener">GitHub</a>
           <a class="btn btn-ghost" href="#projects">View Projects</a>
         </div>
       </div>
-
       <div class="hero-art">
         <img src="assets/flower-robot.svg" alt="Epoxy flower entwined with a small robot illustration" />
       </div>
@@ -62,7 +62,7 @@
       <div class="grid">
         <article class="card">
           <h3>Ongrid Protocol</h3>
-          <p>Solar Power Motoring Edge transactions </p>
+          <p>Solar Power Monitoring & Edge Transactions.</p>
           <div class="chip-row">
             <a class="chip" href="https://ongridprotocol.com" target="_blank" rel="noopener">Site</a>
             <a class="chip" href="#" aria-disabled="true">In Progress</a>
@@ -71,17 +71,28 @@
       </div>
     </section>
 
-    <!-- Articles (optional future expansion) -->
+    <!-- Articles -->
     <section id="articles" class="container section">
       <h2>Articles</h2>
-      <article class="card">
-        <h3>Ongrid Protocol</h3>
-        <p>Solar Power Monitoring & Edge Transactions.</p>
-        <a class="chip" href="article.html?file=ongrid.md">Read</a>
-      </article>
 
+      <!-- Tag Filter Bar -->
+      <div id="tag-filter" class="tag-row"></div>
+
+      <!-- Articles Grid -->
+      <div id="articles-grid" class="grid">
+        <!-- Static featured article -->
+        <article class="card">
+          <h3>Ongrid Protocol</h3>
+          <p>Solar Power Monitoring & Edge Transactions.</p>
+          <div class="chip-row">
+            <a class="chip" href="article.html?file=ongrid.md">Read</a>
+            <span class="chip subtag">#blockchain</span>
+            <span class="chip subtag">#solar</span>
+            <span class="chip subtag">#edge</span>
+          </div>
+        </article>
+      </div>
     </section>
-
 
     <!-- Contact -->
     <section id="contact" class="container section">
@@ -92,6 +103,7 @@
         <a class="chip" href="https://x.com/audrey_nzilani" target="_blank" rel="noopener">X</a>
       </div>
     </section>
+
   </main>
 
   <!-- Footer -->
@@ -99,6 +111,89 @@
     <small>© <span id="year"></span> Audrey Nzilani — Built for GitHub Pages.</small>
   </footer>
 
-  <script src="script.js"></script>
+  <!-- Script -->
+  <script>
+    // Year
+    const year = document.getElementById("year");
+    if (year) year.textContent = new Date().getFullYear();
+
+    // Article Tag Filter + Loader
+    let activeTag = null;
+
+    fetch("articles.json")
+      .then(res => res.json())
+      .then(articles => {
+        const allTags = new Set();
+        articles.forEach(a => a.tags.forEach(t => allTags.add(t)));
+
+        const tagFilter = document.getElementById("tag-filter");
+        const grid = document.getElementById("articles-grid");
+
+        // Render tag chips
+        tagFilter.innerHTML = Array.from(allTags)
+          .map(tag => `<span class="chip tag-chip" data-tag="${tag}">#${tag}</span>`)
+          .join("");
+
+        // Render articles
+        const renderArticles = (tag = null) => {
+          // Keep any static featured article
+          const staticContent = grid.querySelector("article.card")?.outerHTML || "";
+          grid.innerHTML = staticContent +
+            articles
+              .filter(a => !tag || a.tags.includes(tag))
+              .map(a => `
+                <article class="card">
+                  <h3>${a.title}</h3>
+                  <p>${a.desc}</p>
+                  <div class="chip-row">
+                    <a class="chip" href="article.html?file=${a.file}">Read</a>
+                    ${a.tags.map(t => `<span class="chip subtag">#${t}</span>`).join("")}
+                  </div>
+                </article>
+              `)
+              .join("");
+        };
+
+        renderArticles();
+
+        // Handle tag filter clicks
+        tagFilter.addEventListener("click", e => {
+          if (e.target.dataset.tag) {
+            const clickedTag = e.target.dataset.tag;
+            activeTag = activeTag === clickedTag ? null : clickedTag;
+            document.querySelectorAll(".tag-chip").forEach(c =>
+              c.classList.toggle("active", c.dataset.tag === activeTag)
+            );
+            renderArticles(activeTag);
+          }
+        });
+      })
+      .catch(err => console.error("Error loading articles:", err));
+  </script>
+
+  <style>
+    /* Tag + Chip Styling */
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+    .tag-chip.active {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: color-mix(in oklab, var(--accent) 20%, transparent);
+    }
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.6rem;
+    }
+    .subtag {
+      font-size: 0.8rem;
+      opacity: 0.75;
+    }
+  </style>
 </body>
 </html>

@@ -4,8 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="color-scheme" content="dark light">
-  <title>Articles | dreybuilds</title>
+  <title>Article | dreybuilds</title>
   <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 
 <body>
@@ -13,14 +14,8 @@
     <a class="brand" href="index.html">◎ Audrey</a>
   </header>
 
-  <main class="container section">
-    <h1>Articles</h1>
-
-    <!-- Tag Filter Bar -->
-    <div id="tag-filter" class="tag-row"></div>
-
-    <!-- Articles Grid -->
-    <div id="articles-grid" class="grid"></div>
+  <main class="container section" id="content">
+    <h2>Loading article...</h2>
   </main>
 
   <footer class="site-footer container">
@@ -28,70 +23,45 @@
   </footer>
 
   <script>
-    const year = document.getElementById("year");
-    year.textContent = new Date().getFullYear();
+    // Display current year
+    document.getElementById("year").textContent = new Date().getFullYear();
 
-    let activeTag = null;
+    // Extract ?file= parameter from URL
+    const params = new URLSearchParams(window.location.search);
+    const file = params.get("file");
+    const content = document.getElementById("content");
 
-    fetch("articles.json")
-      .then(res => res.json())
-      .then(articles => {
-        const allTags = new Set();
-        articles.forEach(a => a.tags.forEach(t => allTags.add(t)));
-
-        const tagFilter = document.getElementById("tag-filter");
-        const grid = document.getElementById("articles-grid");
-
-        // Render tag chips
-        tagFilter.innerHTML = Array.from(allTags)
-          .map(tag => `<span class="chip tag-chip" data-tag="${tag}">#${tag}</span>`)
-          .join("");
-
-        // Function to render articles
-        const renderArticles = (tag = null) => {
-          grid.innerHTML = articles
-            .filter(a => !tag || a.tags.includes(tag))
-            .map(a => `
-              <article class="card">
-                <h3>${a.title}</h3>
-                <p>${a.desc}</p>
-                <div class="chip-row">
-                  <a class="chip" href="article.html?file=${a.file}">Read</a>
-                  ${a.tags.map(t => `<span class="chip subtag">#${t}</span>`).join("")}
-                </div>
-              </article>
-            `)
-            .join("");
-        };
-
-        // Initial render
-        renderArticles();
-
-        // Tag click filtering
-        tagFilter.addEventListener("click", e => {
-          if (e.target.dataset.tag) {
-            const clickedTag = e.target.dataset.tag;
-            activeTag = activeTag === clickedTag ? null : clickedTag;
-            document.querySelectorAll(".tag-chip").forEach(c => 
-              c.classList.toggle("active", c.dataset.tag === activeTag)
-            );
-            renderArticles(activeTag);
+    if (!file) {
+      content.innerHTML = "<p>No article specified.</p>";
+    } else {
+      fetch("articles/" + file)
+        .then(res => {
+          if (!res.ok) throw new Error("Not found");
+          return res.text();
+        })
+        .then(md => {
+          // Split lines and check for tag line
+          const lines = md.trim().split("\n");
+          let tags = [];
+          if (lines[1] && lines[1].startsWith("@")) {
+            tags = lines[1].split(" ").filter(t => t.startsWith("@"));
+            md = [lines[0], ...lines.slice(2)].join("\n");
           }
-        });
-      });
-  </script>
 
-  <style>
-    /* Add minimal filtering UI */
-    .tag-chip.active {
-      color: var(--accent);
-      border-color: var(--accent);
-      background: color-mix(in oklab, var(--accent) 20%, transparent);
+          // Convert Markdown → HTML
+          const html = marked.parse(md);
+
+          // Render with tag chips at top
+          const tagsHTML = tags.length
+            ? `<div class="tag-row">${tags.map(t => `<span class="chip">#${t.replace("@","")}</span>`).join("")}</div>`
+            : "";
+
+          content.innerHTML = `${tagsHTML}${html}`;
+        })
+        .catch(err => {
+          content.innerHTML = `<p>⚠️ Could not load this article (${err.message}).</p>`;
+        });
     }
-    .subtag {
-      font-size: 0.8rem;
-      opacity: 0.7;
-    }
-  </style>
+  </script>
 </body>
 </html>
