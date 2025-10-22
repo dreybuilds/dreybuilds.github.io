@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="900" viewBox="0 0 1200 900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6cf0ff"/>
+      <stop offset="100%" stop-color="#ff7ad9"/>
+    </linearGradient>
+    <radialGradient id="epoxy" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.8)"/>
+      <stop offset="60%" stop-color="rgba(255,255,255,0.15)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.02)"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- backdrop shapes -->
+  <g opacity=".2">
+    <circle cx="980" cy="80" r="260" fill="url(#g1)" />
+    <circle cx="120" cy="220" r="200" fill="url(#g1)" />
+  </g>
+
+  <!-- epoxy flower -->
+  <g transform="translate(350,140)">
+    <g filter="url(#glow)">
+      <g>
+        <!-- petals -->
+        <g fill="url(#g1)" opacity="0.95">
+          <!-- 8 petals -->
+          <g transform="rotate(0 250 250)">
+            <ellipse cx="250" cy="115" rx="65" ry="120"/>
+          </g>
+          <g transform="rotate(45 250 250)"><ellipse cx="250" cy="115" rx="65" ry="120"/></g>
+          <g transform="rotate(90 250 250)"><ellipse cx="250" cy="115" rx="65" ry="120"/></g>
+          <g transform="rotate(135 250 250)"><ellipse cx="250" cy="115" rx="65" ry="120"/></g>
+          <g transform="rotate(180 250 250)"><ellipse cx="250" cy="115" rx="65" ry="120"/></g>
+          <g transform="rotate(225 250 250)"><ellipse cx="250" cy="115" rx="65" ry="120"/></g>
+          <g transform="rotate(270 250 250)"><ellipse cx="250" cy="115" rx="65" ry="120"/></g>
+          <g transform="rotate(315 250 250)"><ellipse cx="250" cy="115" rx="65" ry="120"/></g>
+        </g>
+        <!-- glossy epoxy highlight -->
+        <ellipse cx="250" cy="250" rx="220" ry="220" fill="url(#epoxy)" />
+        <!-- center -->
+        <circle cx="250" cy="250" r="54" fill="#0b0f14" stroke="url(#g1)" stroke-width="6"/>
+      </g>
+      <!-- stem -->
+      <path d="M250,470 C270,540 220,590 230,680" fill="none" stroke="url(#g1)" stroke-width="8" stroke-linecap="round"/>
+      <circle cx="220" cy="690" r="10" fill="url(#g1)"/>
+    </g>
+  </g>
+
+  <!-- tiny friendly robot -->
+  <g transform="translate(720,420)">
+    <rect x="0" y="0" width="220" height="160" rx="26" fill="#0b0f14" stroke="url(#g1)" stroke-width="6"/>
+    <rect x="26" y="36" width="168" height="64" rx="14" fill="#0b0f14" stroke="#2bd1ff" stroke-width="4"/>
+    <circle cx="66" cy="68" r="14" fill="#2bd1ff"/>
+    <circle cx="154" cy="68" r="14" fill="#2bd1ff"/>
+    <rect x="60" y="120" width="100" height="10" rx="5" fill="url(#g1)"/>
+    <!-- antenna -->
+    <line x1="110" y1="-30" x2="110" y2="0" stroke="url(#g1)" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="110" cy="-38" r="10" fill="url(#g1)"/>
+  </g>
+</svg>

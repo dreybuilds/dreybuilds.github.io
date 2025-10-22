@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark light">
+  <title>Audrey • Epoxy Robot Garden</title>
+  <meta name="description" content="A simple, minimalistic, futuristic personal page with epoxy flower and robot vibes." />
+  <link rel="preload" href="assets/flower-robot.svg" as="image" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header container">
+    <a class="brand" href="#top" aria-label="Home">
+      <span class="brand-mark" aria-hidden="true">◎</span>
+      <span class="brand-text">Audrey</span>
+    </a>
+    <nav class="nav">
+      <button id="themeToggle" class="btn btn-ghost" aria-label="Toggle theme">☾</button>
+      <a href="#about" class="nav-link">About</a>
+      <a href="#projects" class="nav-link">Projects</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero container">
+      <div class="hero-copy">
+        <h1>Epoxy&nbsp;Robot&nbsp;Garden</h1>
+        <p class="lede">Minimal UI, futuristic feel. A blend of glossy <em>epoxy</em> petals and friendly <em>robotics</em>.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="https://github.com/dreybuilds" target="_blank" rel="noopener">GitHub</a>
+          <a class="btn btn-ghost" href="#projects">View Projects</a>
+        </div>
+      </div>
+      <div class="hero-art">
+        <img src="assets/flower-robot.svg" alt="Epoxy flower entwined with a small robot" />
+      </div>
+    </section>
+
+    <section id="about" class="container section">
+      <h2>About</h2>
+      <p>
+        I build things—embedded systems, CAN tooling, and smooth UI that feels like liquid glass.
+        This page is intentionally simple so it loads fast on GitHub Pages and looks sharp on any screen.
+      </p>
+    </section>
+
+    <section id="projects" class="container section">
+      <h2>Projects</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>DePIN Meter Monitor</h3>
+          <p>Vue + Python + Solidity. Lightweight telemetry with on-chain proofs.</p>
+          <a class="chip" href="#" aria-disabled="true">Coming soon</a>
+        </article>
+        <article class="card">
+          <h3>CAN ID Generator</h3>
+          <p>Shared JSON spec ⇒ C/Python headers + docs. Deterministic and linted.</p>
+          <a class="chip" href="#" aria-disabled="true">Docs</a>
+        </article>
+        <article class="card">
+          <h3>NG KP QA Toolkit</h3>
+          <p>Robot Framework suites for firmware, APIs, and UI on embedded Linux.</p>
+          <a class="chip" href="#" aria-disabled="true">Notes</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="contact" class="container section">
+      <h2>Contact</h2>
+      <div class="contact-row">
+        <a class="chip" href="mailto:audrey@example.com">Email</a>
+        <a class="chip" href="https://github.com/dreybuilds" target="_blank" rel="noopener">GitHub</a>
+        <a class="chip" href="https://x.com/" target="_blank" rel="noopener">X</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer container">
+    <small>© <span id="year"></span> Audrey — Built for GitHub Pages.</small>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
