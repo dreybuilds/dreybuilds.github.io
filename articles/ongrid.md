@@ -1,6 +1,7 @@
 # Ongrid Protocol
+@blockchain @solar @edge @rust
 
-Solar Power Monitoring & Edge Transactions
+Solar Power Monitoring & Edge Transactions.
 
 The Ongrid Protocol connects solar micro-grids and edge nodes using secure,
 lightweight blockchain coordination.

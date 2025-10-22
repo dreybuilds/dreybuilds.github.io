@@ -150,3 +150,23 @@ html{ scroll-behavior:smooth; }
   color: var(--accent-2);
   text-decoration: underline;
 }
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.2rem;
+}
+.tag-row .chip {
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: color-mix(in oklab, var(--bg-soft) 70%, transparent);
+  border: 1px solid color-mix(in oklab, var(--text) 15%, transparent);
+  border-radius: 999px;
+  padding: 0.3rem 0.8rem;
+  color: var(--muted);
+}
+.tag-row .chip:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}

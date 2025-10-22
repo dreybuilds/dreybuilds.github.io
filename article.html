@@ -3,17 +3,24 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Article Viewer | dreybuilds</title>
+  <meta name="color-scheme" content="dark light">
+  <title>Articles | dreybuilds</title>
   <link rel="stylesheet" href="styles.css" />
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
+
 <body>
   <header class="site-header container">
     <a class="brand" href="index.html">◎ Audrey</a>
   </header>
 
-  <main class="container section" id="content">
-    <h2>Loading article...</h2>
+  <main class="container section">
+    <h1>Articles</h1>
+
+    <!-- Tag Filter Bar -->
+    <div id="tag-filter" class="tag-row"></div>
+
+    <!-- Articles Grid -->
+    <div id="articles-grid" class="grid"></div>
   </main>
 
   <footer class="site-footer container">
@@ -21,23 +28,70 @@
   </footer>
 
   <script>
-    // Get ?file= parameter (e.g. article.html?file=ongrid-protocol.md)
-    const params = new URLSearchParams(window.location.search);
-    const file = params.get("file");
-    const content = document.getElementById("content");
+    const year = document.getElementById("year");
+    year.textContent = new Date().getFullYear();
 
-    if (file) {
-      fetch("articles/" + file)
-        .then(res => res.text())
-        .then(md => {
-          content.innerHTML = marked.parse(md);
-        })
-        .catch(() => content.innerHTML = "<p>Article not found.</p>");
-    } else {
-      content.innerHTML = "<p>No article specified.</p>";
-    }
+    let activeTag = null;
 
-    document.getElementById("year").textContent = new Date().getFullYear();
+    fetch("articles.json")
+      .then(res => res.json())
+      .then(articles => {
+        const allTags = new Set();
+        articles.forEach(a => a.tags.forEach(t => allTags.add(t)));
+
+        const tagFilter = document.getElementById("tag-filter");
+        const grid = document.getElementById("articles-grid");
+
+        // Render tag chips
+        tagFilter.innerHTML = Array.from(allTags)
+          .map(tag => `<span class="chip tag-chip" data-tag="${tag}">#${tag}</span>`)
+          .join("");
+
+        // Function to render articles
+        const renderArticles = (tag = null) => {
+          grid.innerHTML = articles
+            .filter(a => !tag || a.tags.includes(tag))
+            .map(a => `
+              <article class="card">
+                <h3>${a.title}</h3>
+                <p>${a.desc}</p>
+                <div class="chip-row">
+                  <a class="chip" href="article.html?file=${a.file}">Read</a>
+                  ${a.tags.map(t => `<span class="chip subtag">#${t}</span>`).join("")}
+                </div>
+              </article>
+            `)
+            .join("");
+        };
+
+        // Initial render
+        renderArticles();
+
+        // Tag click filtering
+        tagFilter.addEventListener("click", e => {
+          if (e.target.dataset.tag) {
+            const clickedTag = e.target.dataset.tag;
+            activeTag = activeTag === clickedTag ? null : clickedTag;
+            document.querySelectorAll(".tag-chip").forEach(c => 
+              c.classList.toggle("active", c.dataset.tag === activeTag)
+            );
+            renderArticles(activeTag);
+          }
+        });
+      });
   </script>
+
+  <style>
+    /* Add minimal filtering UI */
+    .tag-chip.active {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: color-mix(in oklab, var(--accent) 20%, transparent);
+    }
+    .subtag {
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+  </style>
 </body>
 </html>
