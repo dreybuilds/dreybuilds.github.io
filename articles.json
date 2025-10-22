@@ -9,5 +9,16 @@
       "edge",
       "rust"
     ]
+  },
+  {
+    "title": "Decentralized Identity with DID",
+    "desc": "Implementing Decentralized Identifiers for Secure Identity Management.",
+    "file": "https://hackmd.io/laWrTac9QXyHjmEUfMsVLQ",
+    "tags": [
+      "blockchain",
+      "identity",
+      "security",
+      "decentralization"
+    ]
   }
 ]
