@@ -1,4 +1,5 @@
 # Testing vs Me!
+@testing @noob @qa @thoughts
 
 Here I am trying to get my groove on with testing 
 
