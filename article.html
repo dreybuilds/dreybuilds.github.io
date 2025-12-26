@@ -3,12 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="color-scheme" content="dark light">
   <title>Article | dreybuilds</title>
   <link rel="stylesheet" href="styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
-
 <body>
   <header class="site-header container">
     <a class="brand" href="index.html">◎ Audrey</a>
@@ -23,10 +21,8 @@
   </footer>
 
   <script>
-    // Display current year
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Extract ?file= parameter from URL
     const params = new URLSearchParams(window.location.search);
     const file = params.get("file");
     const content = document.getElementById("content");
@@ -34,29 +30,38 @@
     if (!file) {
       content.innerHTML = "<p>No article specified.</p>";
     } else {
-      fetch(file)
+      fetch(`articles/${file}`)
         .then(res => {
           if (!res.ok) throw new Error("Not found");
           return res.text();
         })
         .then(md => {
-          // Split lines and check for tag line
-          const lines = md.trim().split("\n");
+          const lines = md.split("\n");
           let tags = [];
-          if (lines[1] && lines[1].startsWith("@")) {
-            tags = lines[1].split(" ").filter(t => t.startsWith("@"));
+
+          if (lines[1] && lines[1].trim().startsWith("@")) {
+            tags = lines[1]
+              .trim()
+              .split(/\s+/)
+              .filter(t => t.startsWith("@"));
+
             md = [lines[0], ...lines.slice(2)].join("\n");
           }
 
-          // Convert Markdown → HTML
           const html = marked.parse(md);
 
-          // Render with tag chips at top
           const tagsHTML = tags.length
-            ? `<div class="tag-row">${tags.map(t => `<span class="chip">#${t.replace("@","")}</span>`).join("")}</div>`
+            ? `<div class="tag-row">
+                ${tags.map(t => `<span class="chip">#${t.slice(1)}</span>`).join("")}
+              </div>`
             : "";
 
-          content.innerHTML = `${tagsHTML}${html}`;
+          content.innerHTML = `
+            <div class="card">
+              ${tagsHTML}
+              ${html}
+            </div>
+          `;
         })
         .catch(err => {
           content.innerHTML = `<p>⚠️ Could not load this article (${err.message}).</p>`;

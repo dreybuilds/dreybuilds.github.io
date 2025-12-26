@@ -1,8 +1,7 @@
 # Testing vs Me
+@testing @qa @learning
 
 learning to care deeply, not just ship fast
-
-@testing @qa @learning
 
 Testing has always felt like a quiet tug-of-war between speed and depth for me.
 

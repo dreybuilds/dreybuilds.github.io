@@ -3,6 +3,20 @@
     "title": "Testing vs Me",
     "desc": "learning to care deeply, not just ship fast",
     "file": "revelations_on_testing.md",
-    "tags": []
+    "tags": [
+      "testing",
+      "qa",
+      "learning"
+    ]
+  },
+  {
+    "title": "Noob at Eth BuidlGuidl",
+    "desc": "back to basics",
+    "file": "speedrun_eth.md",
+    "tags": [
+      "noob",
+      "blockchain",
+      "web3"
+    ]
   }
 ]

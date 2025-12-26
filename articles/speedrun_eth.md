@@ -1,4 +1,7 @@
 # Noob at Eth BuidlGuidl
+@noob @blockchain @web3
+
+back to basics
 
 Started this https://speedrunethereum.com
 
@@ -6,7 +9,7 @@ Why you ask? I wanna know how the system works.
 Don't be surprised this is me after having multiple startups in web3 over the past 1 year. 
 And consecutively working in web2 and Hardware projects
 
-OGp, SemaAI, PredictaAI, Tyzer ... 
+OGP, SemaAI, PredictaAI, Tyzer ... 
 
 thanks but I think hardwork, vibe coding and vibes end here and now we dig a little deeper 
 
