@@ -3,10 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark light">
   <title>Article | dreybuilds</title>
   <link rel="stylesheet" href="styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
+
 <body>
   <header class="site-header container">
     <a class="brand" href="index.html">◎ Audrey</a>
@@ -30,43 +32,34 @@
     if (!file) {
       content.innerHTML = "<p>No article specified.</p>";
     } else {
-      fetch(`articles/${file}`)
+      // Fetch from articles folder with cache-busting
+      fetch(`articles/${file}?ts=${Date.now()}`)
         .then(res => {
           if (!res.ok) throw new Error("Not found");
           return res.text();
         })
         .then(md => {
-          const lines = md.split("\n");
+          const lines = md.trim().split("\n");
           let tags = [];
 
-          if (lines[1] && lines[1].trim().startsWith("@")) {
-            tags = lines[1]
-              .trim()
-              .split(/\s+/)
-              .filter(t => t.startsWith("@"));
-
+          if (lines[1] && lines[1].startsWith("@")) {
+            tags = lines[1].split(" ").filter(t => t.startsWith("@"));
             md = [lines[0], ...lines.slice(2)].join("\n");
           }
 
           const html = marked.parse(md);
 
           const tagsHTML = tags.length
-            ? `<div class="tag-row">
-                ${tags.map(t => `<span class="chip">#${t.slice(1)}</span>`).join("")}
-              </div>`
+            ? `<div class="tag-row">${tags.map(t => `<span class="chip">#${t.replace("@","")}</span>`).join("")}</div>`
             : "";
 
-          content.innerHTML = `
-            <div class="card">
-              ${tagsHTML}
-              ${html}
-            </div>
-          `;
+          content.innerHTML = `${tagsHTML}${html}`;
         })
         .catch(err => {
           content.innerHTML = `<p>⚠️ Could not load this article (${err.message}).</p>`;
         });
     }
   </script>
+
 </body>
 </html>
